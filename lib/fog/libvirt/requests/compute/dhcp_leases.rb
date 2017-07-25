@@ -6,6 +6,11 @@ module Fog
       class Real
         def dhcp_leases(uuid, mac, flags = 0)
           client.lookup_network_by_uuid(uuid).dhcp_leases(mac, flags)
+        rescue => e
+          if e.message =~ /no lease with matching MAC address/
+            return []
+          end
+          raise e.class, e.message
         end
       end
 
